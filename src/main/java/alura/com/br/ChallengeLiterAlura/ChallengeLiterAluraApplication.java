@@ -14,7 +14,7 @@ public class ChallengeLiterAluraApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Principal principal = new Principal(null);
+        Principal principal = new Principal();
         principal.exibeMenu();
      
     }
