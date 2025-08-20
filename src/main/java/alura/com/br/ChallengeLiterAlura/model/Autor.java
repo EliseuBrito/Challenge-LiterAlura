@@ -1,15 +1,15 @@
 package alura.com.br.ChallengeLiterAlura.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -19,55 +19,35 @@ public class Autor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, length = 200, unique = true)
     private String nome;
+
+    @Column(name = "data_nascimento")
     private Integer dataNascimento;
+
+    @Column(name = "data_morte")
     private Integer dataMorte;
 
-    @ManyToMany(mappedBy = "autores")
-    @JsonIgnoreProperties("autores")
-    private List<Livro> livros = new ArrayList<>();
+    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Livro> livros = new HashSet<>();
 
-    public List<Livro> getLivros() {
-        return livros;
-    }
+    public Autor() {}
 
-    public void setLivros(List<Livro> livros) {
-        this.livros = livros;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
+    public Autor(String nome, Integer dataNascimento, Integer dataMorte) {
         this.nome = nome;
-    }
-
-    public Integer getDataNascimento(){
-        return dataMorte;
-        
-    }
-
-    public void setDataNascimento(Integer dataNascimento) {
         this.dataNascimento = dataNascimento;
-    }
-
-    public Integer getDataMorte() {
-        return dataMorte;
-    }
-
-    public void setDataMorte(Integer dataMorte) {
         this.dataMorte = dataMorte;
     }
 
+    public Long getId() { return id; }
+    public String getNome() { return nome; }
+    public void setNome(String nome) { this.nome = nome; }
+    public Integer getdataNascimento() { return dataNascimento; }
+    public void setdataNascimento(Integer dataNascimento) { this.dataNascimento = dataNascimento; }
+    public Integer getdataMorte() { return dataMorte; }
+    public void setdataMorte(Integer dataMorte) { this.dataMorte = dataMorte; }
+    public Set<Livro> getLivros() { return livros; }
 
     @Override
     public String toString() {

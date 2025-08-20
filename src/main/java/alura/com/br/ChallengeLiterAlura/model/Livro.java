@@ -1,14 +1,13 @@
 package alura.com.br.ChallengeLiterAlura.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -17,67 +16,53 @@ public class Livro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(length = 500, nullable = false)
     private String titulo;
+
+    @Column(length = 5)
     private String idioma;
+
+    @Column(name = "quantidade_downloads")
     private Long quantidadeDownloads;
 
-    public Livro(DadosLivro dados){}
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "autor_id")
+    private Autor autor;
 
-    @ManyToMany
-    @JoinTable(
-        name = "livros_autores",
-        joinColumns = @JoinColumn(name = "livro_id"),
-        inverseJoinColumns = @JoinColumn(name = "autor_id")
-    )
-    private List<Autor> autores = new ArrayList<>();
+    public Livro() {}
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(String titulo) {
+    public Livro(String titulo, String idioma, Long quantidadeDownloads) {
         this.titulo = titulo;
-    }
-
-    public String getIdioma() {
-        return idioma;
-    }
-
-    public void setIdioma(String idioma) {
         this.idioma = idioma;
-    }
-
-    public Long getQuantidadeDownloads() {
-        return quantidadeDownloads;
-    }
-
-    public void setQuantidadeDownloads(Long quantidadeDownloads) {
         this.quantidadeDownloads = quantidadeDownloads;
     }
 
-    public List<Autor> getAutores() {
-        return autores;
-    }
 
-    public void setAutores(List<Autor> autores) {
-        this.autores = autores;
-    }
+    public Long getId() { return id; }
 
+    public String getTitulo() { return titulo; }
+
+    public void setTitulo(String titulo) { this.titulo = titulo; }
+
+    public String getIdioma() { return idioma; }
+
+    public void setIdioma(String idioma) { this.idioma = idioma; }
+
+    public Long getquantidadeDownloads() { return quantidadeDownloads; }
+
+    public void setquantidadeDownloads(Long quantidadeDownloads) { this.quantidadeDownloads = quantidadeDownloads; }
+
+    public Autor getAutor() { return autor; }
+
+    public void setAutor(Autor autor) { this.autor = autor; }
 
 
     @Override
     public String toString() {
         return "----- LIVRO -----" +
                 "\nTítulo: " + titulo +
-                "\nAutor (es): " + (autores.isEmpty() ? "Nao Identificado" : autores) +
+                "\nAutor (es): " + autor +
                 "\nIdioma: " + idioma +
                 "\nDownloads: " + quantidadeDownloads +
                 "\n-------------------";
